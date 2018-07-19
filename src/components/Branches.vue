@@ -10,25 +10,27 @@
               {{branch.name}}
           </li>
       </ul>
-      <div v-for="commit in commits">
-          <commit :dato="commit"></commit>
+      <div>
+          <ul>
+            <commits :dato="commit" v-for="commit in commits"></commits>
+          </ul>
       </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import commit from './commit';
+import commits from './commits';
 export default {
   name: 'Branches',
   components:{
-      commit
+      commits
   },
   data () {
     return {
         branches:[],
         gitApi:"https://api.github.com/repos/",
-        clave:"?client_id=a3fbb40a9ea79bb5b81e&client_secret=bc4039616148d3f52a56136a3113b65d8fe7483d",
+        clave:"client_id=a3fbb40a9ea79bb5b81e&client_secret=bc4039616148d3f52a56136a3113b65d8fe7483d",
         urlGit:"",
         mandar:"",
         commits:[]
@@ -36,7 +38,7 @@ export default {
   },
   methods: {
       recarga(){
-          axios.get(this.gitApi+this.mandar+"/branches"+this.clave)
+          axios.get(this.gitApi+this.mandar+"/branches?"+this.clave)
             .then( res => { 
                 this.branches = res.data
             });
@@ -49,8 +51,7 @@ export default {
       },
       selected(branch){
         console.log(branch)
-        console.log(this.gitApi+this.mandar+"/commits/"+branch+this.clave)
-        axios.get(this.gitApi+this.mandar+"/commits/"+branch+this.clave)
+        axios.get(this.gitApi+this.mandar+"/commits?sha="+branch+"&"+this.clave)
             .then( res => { 
                 this.commits = res.data;
                 this.selected();
