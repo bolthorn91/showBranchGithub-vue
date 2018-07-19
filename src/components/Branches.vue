@@ -5,15 +5,10 @@
           <input type="button" @click="buscar" value="Buscar">
       </div>
       <ul class="list">
-          <li v-for="branch in branches" class="list">
-              <input type="radio" name="selector" @click="selected(branch.name)" >
-              {{branch.name}}
-          </li>
+          <selector :branch="branch" v-for="branch in branches" v-on:selected="selected"></selector>
       </ul>
       <div>
-          <ul>
-            <commits :dato="commit" v-for="commit in commits"></commits>
-          </ul>
+        <commits :gitApi="gitApi" :clave="clave" :mandar="mandar" :branch="branch" ></commits>
       </div>
   </div>
 </template>
@@ -21,10 +16,12 @@
 <script>
 import axios from 'axios';
 import commits from './commits';
+import selector from './selector';
 export default {
   name: 'Branches',
   components:{
-      commits
+      commits,
+      selector
   },
   data () {
     return {
@@ -33,7 +30,7 @@ export default {
         clave:"client_id=a3fbb40a9ea79bb5b81e&client_secret=bc4039616148d3f52a56136a3113b65d8fe7483d",
         urlGit:"",
         mandar:"",
-        commits:[]
+        branch:""
     }
   },
   methods: {
@@ -46,16 +43,10 @@ export default {
       buscar(){
         let urlGit= this.urlGit.split(".com/");
         this.mandar=urlGit[1];
-        console.log(this.mandar);
         this.recarga();
       },
       selected(branch){
-        console.log(branch)
-        axios.get(this.gitApi+this.mandar+"/commits?sha="+branch+"&"+this.clave)
-            .then( res => { 
-                this.commits = res.data;
-                this.selected();
-            });
+          this.branch=branch;
       }
   }
 }
