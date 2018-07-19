@@ -4,8 +4,8 @@
           <input type="text" v-model="urlGit">
           <input type="button" @click="buscar" value="Buscar">
       </div>
-      <ul>
-          <li v-for="branch in branches">
+      <ul class="list">
+          <li v-for="branch in branches" class="list">
               <input type="radio" name="selector" @click="selected(branch.name)" >
               {{branch.name}}
           </li>
@@ -60,11 +60,11 @@ export default {
 }
 </script>
 <style>
-    ul {
+    ul .list{
     list-style-type: none;
     padding: 0;
     }
-    li {
+    li .list{
     display: inline-block;
     margin: 0 10px;
     }
